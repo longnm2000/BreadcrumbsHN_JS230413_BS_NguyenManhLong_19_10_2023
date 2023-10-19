@@ -72,6 +72,20 @@ function TodoComp() {
           }
         });
       };
+
+      const handleComplete = async (id:number) => {
+        try {
+          await axios.put(`http://localhost:3000/api/v1/todo/${id}`);
+          fetchData();
+          Swal.fire({
+            icon: "success",
+            title: "Đã cập nhật!",
+            timer: 2000,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      };
     
     return (
         <>
@@ -85,7 +99,7 @@ function TodoComp() {
                     {data?.map((e,i)=><div key={i} className='flex justify-between py-3 px-5 bg-red-300'>
                         <span className='text-gray-100'>{e.task}</span>
                         <div className='flex space-x-3 items-center'>
-                            <input type="checkbox" name="complete" id="complete" />
+                            <input type="checkbox" name="complete" id="complete" defaultChecked={e.status === 1} onClick={()=>handleComplete(e.id)} />
                             <i className="fa-solid fa-trash" style={{ color: "#ffffff" }} onClick={()=>handleDelete(e.id)}></i>
                         </div>
                     </div>)}

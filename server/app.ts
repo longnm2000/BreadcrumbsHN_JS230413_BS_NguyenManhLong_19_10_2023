@@ -51,6 +51,30 @@ app.post("/api/v1/todo", async (req, res) => {
     }
   });
 
+  app.put("/api/v1/todo/:id", async (req, res) => {
+    const { id } = req.params;
+    
+    try {
+        const [rows, fields] = await connection.promise().execute("SELECT * FROM todo WHERE id=?",[id]);
+        let change:number=0;
+       
+        if (Array.isArray(rows) && rows.length > 0) {
+            const row = rows[0] as {id:number,task:string, status: number };
+            change = row.status===1?0:1;
+        } else {
+            console.log("No rows found.");
+        }
+        
+      await connection.promise().execute("UPDATE todo SET status=? WHERE id=?", [change,id]);
+      res.status(200).json({
+        message: "Update task successfully",
+        status: "success",
+      });
+    } catch (error) {
+      res.json(error);
+    }
+  });
+
 app.listen(3000,()=>{
     console.log("app listening at http://localhost:3000")
 })
