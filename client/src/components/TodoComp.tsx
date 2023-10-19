@@ -97,7 +97,7 @@ function TodoComp() {
                 </div>
                 <div className='flex flex-col space-y-2'>
                     {data?.map((e,i)=><div key={i} className='flex justify-between py-3 px-5 bg-red-300'>
-                        <span className='text-gray-100'>{e.task}</span>
+                        {e.status===1?<span className='text-gray-100 line-through'>{e.task}</span>:<span className='text-gray-100'>{e.task}</span>}
                         <div className='flex space-x-3 items-center'>
                             <input type="checkbox" name="complete" id="complete" defaultChecked={e.status === 1} onClick={()=>handleComplete(e.id)} />
                             <i className="fa-solid fa-trash" style={{ color: "#ffffff" }} onClick={()=>handleDelete(e.id)}></i>
